@@ -1,0 +1,18 @@
+{
+  "name": "biconomy-abstract-setup",
+  "version": "1.0.0",
+  "description": "This repository contains the necessary configuration files to deploy and run a Mee Node. This guide will walk you through the setup process and provide information about node maintenance.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Akash Kulkarni",
+  "license": "ISC",
+  "dependencies": {
+    "@biconomy/abstractjs": "^1.1.0",
+    "viem": "^2.34.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.20"
+  }
+}

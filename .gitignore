@@ -1,0 +1,7 @@
+keystore
+redis-data
+logs
+.vscode
+
+.env
+node_modules
