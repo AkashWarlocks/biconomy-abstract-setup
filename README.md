@@ -1,211 +1,114 @@
-# Mee Node Deployment Guide
+# Mee Node Quick Start & Testing Guide
 
-This repository contains the necessary configuration files to deploy and run a Mee Node. This guide will walk you through the setup process and provide information about node maintenance.
+**Prerequisites:**
+- Docker & Docker Compose installed
+- Node.js & Bun installed
+- Foundry (`cast`, `anvil`) installed
 
-## Prerequisites
+## 1. Initial Steps: Fork Mainnet and Fund Accounts
 
-- Docker and Docker Compose installed
-- Access to RPC endpoints for the chains you want to support
-- Sufficient funds in native tokens for the supported chains
+**Fork Mainnet with Anvil:**
 
-## Setting Up a Node
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/bcnmy/mee-node-deployment
-cd mee-node-deployment
+```sh
+anvil --fork-url <MAINNET_RPC_URL>
 ```
 
-### 2. Configure Chain RPC URLs
+This command will start a local Ethereum node that simulates mainnet by forking from a live RPC endpoint. You can use it for safe testing and development with real mainnet state and contracts.
 
-1. Navigate to the appropriate chains folder:
-   - `chains-prod/` for mainnet networks
-   - `chains-testnet/` for testnet networks
+**Fund USDC to your account using Cast and Whale:**
+1. Set up your environment variables in `.env`:
+   ```
+   USDC=<usdc_contract_address>
+   USDC_WHALE=<whale_address>
+   AKASH=<your_account_address>
+   AMOUNT=<amount_in_usdc>
+   ETHER_AMOUNT=<amount_in_ether>
+   ETHER_WHALE=<ether_whale_address>
+   ```
+2. Use the provided script to transfer USDC from the whale to your account:
+   ```sh
+   ./transfer_usdc.sh
+   ```
+   This script impersonates the whale and sends USDC to your account using Foundry's cast.
+3. Use the provided script to transfer ether from the whale to your account:
+   ```sh
+   ./transfer_ether.sh
+   ```
+   This script impersonates the whale and sends ether to your account using Foundry's cast.
 
-2. For each chain you want to support, create a JSON file with the RPC configuration.
+## 2. Clear Setup Instructions
 
-> **Note**: For mainnet node operators, it's recommended to support all 9 mainnet networks from the `chains-prod` folder.
-
-### 3. Configure Docker Compose
-
-1. Open `docker-compose.yml` and ensure the volumes section points to your chosen chains folder:
-   ```yaml
-   volumes:
-     - ./chains-testnet:/app/chains  # Change to chains-prod for mainnet
+**Steps:**
+1. Clone the repo:
+   ```sh
+   git clone https://github.com/bcnmy/mee-node-deployment
+   cd mee-node-deployment
+   ```
+2. Create a `.env` file with:
+   ```
+   KEY=<your_eoa_private_key>
+   USDC=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+   AUSDC=0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c
+   AAVE_POOL_ADDRESS=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2
+   ```
+3. Install dependencies:
+   ```sh
+   bun install
    ```
 
-2. You can support both mainnet and testnet by adding JSON files to the loaded chains folder.
+## 3. Scripts for Forking Mainnet and Starting MEE Node
 
-### 4. Set Up Environment Variables
+**Fork Mainnet with Anvil:**
+```sh
+anvil --fork-url https://rpc.ankr.com/eth --block-base-fee-per-gas 0 --chain-id 1 --port 8545
+```
+## Local Chain Configuration Example
 
-You can provide environment variables in two ways:
+To ensure the Mee Node and scripts interact with your local Anvil fork, you must configure your chain JSON file correctly. Here’s how changes were made in `chains-local/1.json`:
 
-1. Create a `.env` file with the following minimum configuration:
-   ```env
-   KEY=<your-private-key>
-   PORT=3000
-   REDIS_HOST=redis
-   REDIS_PORT=6379
-   ```
-   
-   To use the `.env` file, run Docker Compose with the `--env-file` flag:
-   ```bash
-   docker compose --env-file .env up -d
-   ```
-   Or you can add the `env_file` directive to your `docker-compose.yml`:
-   ```yaml
-   services:
-     node:
-       env_file:
-         - .env
-   ```
+OR USE `chains-prod/1.json` Copy paste inside `chains-local/1.json` and change `rpc` as mentioned below
 
-2. Or provide them directly in the `docker-compose.yml` file as shown in the example:
-   ```yaml
-   environment:
-     - KEY=<your-private-key>
-     - PORT=3000
-     - REDIS_HOST=redis
-     - REDIS_PORT=6379
-   ```
+```json
+{
+  "name": "Anvil Mainnet Fork",
+  "rpc": "http://host.docker.internal:8545",
+  "chainId": "1",
+  "type": "evm",
+  "eip1559": true,
+  ...
+}
+```
+- **name**: Set to "Anvil Mainnet Fork" for clarity.
+- **rpc**: Uses `http://host.docker.internal:8545` so Docker containers can access the Anvil node running on your host machine.
+- **chainId**: Set to "1" to match Ethereum mainnet.
+- **Other fields**: Match mainnet token addresses and oracles for realistic simulation.
 
-> **Note**: If you're using your own Redis instance, update `REDIS_HOST` and `REDIS_PORT` accordingly.
-
-### 5. Fund Your Node
-
-Ensure your node's private key address is funded with sufficient native tokens on all supported chains. Recommended minimum funding:
-
-| Chain | Minimum Native Token |
-|-------|---------------------|
-| ETH-based chains | 0.05 ETH |
-| Gnosis Chain | 100 xDAI |
-| BSC | 0.17 BNB |
-| Sonic Chain | 50 S |
-| Polygon | 500 POL |
-| Avax C-Chain | 5 AVAX |
-
-### 6. Start the Node
-
-```bash
+**Start MEE Node (Docker):**
+```sh
 docker compose up -d
 ```
 
-Upon successful startup, you should see logs indicating:
-- Node initialization
-- Chain health checks
-- Simulator status
+## 4. Test Script Demonstrating the Supertransaction
 
-## Additional Configuration Options
-
-The following environment variables can be added to your `.env` file for additional configuration:
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `FEE_BENEFICIARY` | Address that collects node fees | Node's private key address |
-| `FEE_PERCENTAGE` | Percentage added to gas fees | 10 |
-| `GATEWAY_URL` | Biconomy Network URL | Required for mainnet |
-| `ENV_ENC_PASSWORD` | Password for encrypted key file | - |
-| `USEROP_MIN_EXEC_WINDOW_DURATION` | Minimum execution window (seconds) | 180 |
-| `USEROP_MAX_EXEC_WINDOW_DURATION` | Maximum execution window (seconds) | 600 |
-| `USEROP_MAX_WAIT_BEFORE_EXEC_START` | Maximum future execution time (seconds) | 300 |
-| `USEROP_TRACE_CALL_SIMULATION_POLL_INTERVAL` | Simulation check interval (seconds) | 2 |
-| `USEROP_SAFE_WINDOW_BEFORE_EXEC_END` | Early execution threshold (seconds) | 30 |
-| `MAX_CALLDATA_GAS_LIMIT` | Maximum calldata gas limit | 330000001 |
-| `HEALTH_CHECK_INTERVAL` | How often the node performs chain health checks (seconds) | 300 |
-| `GLUEX_PARTNER_UNIQUE_ID` | Partner ID for GlueX integration | - |
-| `GLUEX_API_KEY` | API key for GlueX integration | - |
-
-## Loading Encrypted Private Key
-
-Instead of providing the raw private key, you can use an encrypted key file:
-
-1. Install the ChainLink env-enc package:
-   ```bash
-   npm install -g @chainlink/env-enc
-   ```
-
-2. Generate encrypted key:
-   ```bash
-   npx env-enc set-pw
-   npx env-enc set
-   ```
-   When prompted, enter "KEY" as the variable name and your private key as the value.
-
-3. Rename the generated file to `key.enc` and place it in the `./keystore` folder.
-
-4. In your `.env` file, replace the `KEY` variable with:
-   ```env
-   ENV_ENC_PASSWORD=<your-encryption-password>
-   ```
-
-## Any Gas Token Support
-
-If you want to support additional gas tokens beyond what's explicitly allowed by the chain configuration, you can activate GlueX integration. This feature enables users to pay for transaction execution using any supported token, while your node receives the native coin.
-
-GlueX integration works by automatically swapping the user's chosen token into the native coin required for execution. This means:
-- Users can spend any supported token
-- Your node receives the native coin for gas fees
-- The swap happens automatically as part of the transaction
-
-To activate GlueX support, add the following environment variables to your configuration:
-```env
-GLUEX_PARTNER_UNIQUE_ID=<your-partner-id>
-GLUEX_API_KEY=<your-api-key>
+Run the test script:
+```sh
+bun run new-app.ts
 ```
+This script:
+- Checks balances before and after
+- Executes a supertransaction: USDC transfer, AAVE supply, aUSDC transfer
 
-## Node Maintenance
+## 5. Documentation & Approach
 
-### Monitoring Node Health
+**Approach:**
+- Used Bun for fast TypeScript execution.
+- Used Foundry’s Anvil to fork Ethereum mainnet locally for safe testing.
+- Used Docker Compose to run the MEE node and Redis.
+- The script demonstrates a multi-step supertransaction using the MEE node’s API and prints all relevant balances.
 
-1. Check the node status endpoint:
-   ```
-   http://localhost:3000/v3/info
-   ```
+**Challenges:**
+- Ensuring all contract addresses and ABIs are correct for mainnet fork.
+- Handling Docker networking (`host.docker.internal`) for RPC access.
+- Managing environment variables for private keys and token addresses securely.
 
-2. Monitor chain health status in the response. A healthy chain status looks like:
-   ```json
-   {
-     "chainId": "11155420",
-     "name": "OP Sepolia",
-     "healthCheck": {
-       "rpcOperational": true,
-       "debugTraceCallSupported": true,
-       "nativeBalance": "528841195784636675",
-       "nonce": 5055,
-       "execQueueActiveJobs": 0,
-       "execQueuePendingJobs": 0,
-       "lastChecked": 1743538429111,
-       "status": "healthy"
-     }
-   }
-   ```
-
-### Balance Management
-
-1. Regularly monitor native token balances across all supported chains
-2. Swap earned ERC20 tokens for native tokens when needed
-3. Maintain sufficient funding for gas fees
-
-### Troubleshooting
-
-If a chain shows unhealthy status:
-```json
-{
-  "chainId": "421614",
-  "name": "Arbitrum Sepolia",
-  "healthCheck": {
-    "status": "not-healthy",
-    "reason": "native coin balance too low"
-  }
-}
-```
-
-Take appropriate action based on the reported reason:
-- Add more native tokens if balance is low
-- Check RPC connectivity if RPC is not operational
-- Review execution queue if jobs are stuck
-
-## Support
-
-For additional support or questions, please refer to the project documentation or contact the development team.
+---

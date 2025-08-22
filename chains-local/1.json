@@ -1,6 +1,6 @@
 {
-    "name": "Ethereum",
-    "rpc": " http://host.docker.internal:8545",
+    "name": "Anvil Mainnet Fork",
+    "rpc": "http://host.docker.internal:8545",
     "isTestChain": false,
     "chainId": "1",
     "type": "evm",
