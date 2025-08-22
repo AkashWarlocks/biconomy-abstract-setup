@@ -1,5 +1,13 @@
 # Mee Node Quick Start & Testing Guide
 
+## Index
+- [Mee Node Quick Start \& Testing Guide](#mee-node-quick-start--testing-guide)
+  - [Index](#index)
+  - [1. Initial Steps: Fork Mainnet and Fund Accounts](#1-initial-steps-fork-mainnet-and-fund-accounts)
+  - [2. Scripts for Forking Mainnet and Starting MEE Node](#2-scripts-for-forking-mainnet-and-starting-mee-node)
+  - [3. Test Script Demonstrating the Supertransaction](#3-test-script-demonstrating-the-supertransaction)
+  - [4. Documentation \& Approach](#4-documentation--approach)
+
 **Prerequisites:**
 - Docker & Docker Compose installed
 - Node.js & Bun installed
@@ -95,19 +103,6 @@ This script:
 - Checks balances before and after
 - Executes a supertransaction: USDC transfer, AAVE supply, aUSDC transfer
 
-## 5. Documentation & Approach
+## 4. Documentation & Approach
 
-**Approach:**
-- Used Bun for fast TypeScript execution.
-- Used Foundry’s Anvil to fork Ethereum mainnet locally for safe testing.
-- Used Docker Compose to run the MEE node and Redis.
-- The script demonstrates a multi-step supertransaction using the MEE node’s API and prints all relevant balances.
-
-**Challenges:**
-- Ensuring all contract addresses and ABIs are correct for mainnet fork.
-- Handling Docker networking (`host.docker.internal`) for RPC access.
-- Managing environment variables for private keys and token addresses securely.
-
----
- ## RESULTS
-
+[See the Detailed Guide](./DETAILED_GUIDE.md)

@@ -1,5 +1,23 @@
 # Detailed Approach & Problems Faced
 
+## Index
+- [Detailed Approach \& Problems Faced](#detailed-approach--problems-faced)
+  - [Index](#index)
+  - [Approach](#approach)
+    - [1. Local Chain Setup with `defineChain`](#1-local-chain-setup-with-definechain)
+    - [2. Transaction Flow: USDC → Smart Account → AAVE → aUSDC → EOA](#2-transaction-flow-usdc--smart-account--aave--ausdc--eoa)
+    - [3. Using `runtimeERC20BalanceOf` for Runtime Balance Checks](#3-using-runtimeerc20balanceof-for-runtime-balance-checks)
+  - [Problems Faced \& Solutions](#problems-faced--solutions)
+    - [1. Docker Compose \& Private Key Exposure](#1-docker-compose--private-key-exposure)
+    - [2. Chain Configuration \& Zero Balances](#2-chain-configuration--zero-balances)
+  - [Results](#results)
+    - [1. Check Balances with Script](#1-check-balances-with-script)
+    - [2. Example Log Output](#2-example-log-output)
+      - [Before Supertransaction](#before-supertransaction)
+      - [After Supertransaction](#after-supertransaction)
+    - [What to Look For](#what-to-look-for)
+    - [Why This Matters](#why-this-matters)
+
 ## Approach
 
 ### 1. Local Chain Setup with `defineChain`
