@@ -58,9 +58,6 @@ This command will start a local Ethereum node that simulates mainnet by forking 
 
 ## 2. Scripts for Forking Mainnet and Starting MEE Node
 
-**Fork Mainnet with Anvil:**
-```sh
-anvil --fork-url https://rpc.ankr.com/eth --block-base-fee-per-gas 0 --chain-id 1 --port 8545
 ```
 ## Local Chain Configuration Example
 
@@ -114,4 +111,3 @@ This script:
 ---
  ## RESULTS
 
- 
