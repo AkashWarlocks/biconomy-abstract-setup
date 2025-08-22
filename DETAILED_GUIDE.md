@@ -1,4 +1,3 @@
-
 # Detailed Approach & Problems Faced
 
 ## Approach
@@ -97,22 +96,35 @@ This ensures the transaction uses the actual balance at execution time, making t
 - Switched to using `defineChain` to create a custom chain object for the local Anvil fork, ensuring correct RPC routing and state, which fixed balance queries and transaction execution.
 
 ---
- ## Results
+## Results
 
- 1. Before Super Trasaction Logs:
+After running the supertransaction script, you can verify the outcome by checking balances using the provided script or by reviewing the logs.
+
+### 1. Check Balances with Script
+Use the following command to check your EOA's balances before and after the transaction:
 ```sh
+./check_balance.sh <EOA_ACCOUNT_ADDRESS>
+```
+```sh
+./check_balance_aave.sh <EOA_ACCOUNT_ADDRESS>
+```
+This will display the current USDC, aUSDC, and ETH balances for the specified account.
+
+### 2. Example Log Output
+Below are sample logs showing the state before and after a successful supertransaction:
+
+#### Before Supertransaction
+```
 ---------------Before Transaction------------------
 EOA USDC Balance: 29940000000
 Smart Account USDC Balance: 0
 EOA aUSDC Balance: 80001017
 Smart Account aUSDC Balance: 0
-EOA ETH Balance: 1999962309922624173318
 ---------------------------------------------------
 ```
 
-2. After Super Transaction Logs
-
-```sh
+#### After Supertransaction
+```
 txn Hash Link: 0x50db5ab9ddaab37d0fbd07075a14eb394153d410696926ae8b546d084b38254e
 Transaction succeeded!
 ---------------After Transaction------------------
@@ -122,6 +134,19 @@ Smart Account USDC Balance: 0
 EOA aUSDC Balance: 90001057
 ------------**********************----------------
 Smart Account aUSDC Balance: 0
-EOA ETH Balance: 1999959043998790918288
 ---------------------------------------------------
 ```
+
+### What to Look For
+- **USDC Balance:** Decreases in EOA, showing USDC was supplied to AAVE.
+- **aUSDC Balance:** Increases in EOA, confirming receipt of interest-bearing tokens.
+- **ETH Balance:** Slight decrease due to transaction gas costs.
+- **Smart Account Balances:** Should be zero after the flow, as tokens are returned to EOA.
+
+### Why This Matters
+These checks confirm that:
+- The supertransaction executed all steps atomically.
+- Funds moved as expected between EOA, smart account, and AAVE.
+- The runtime balance logic worked, using actual balances at execution time.
+
+For troubleshooting, always compare your logs to these expected results. If balances do not update as shown, review your chain setup, environment variables, and transaction flow.
