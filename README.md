@@ -32,32 +32,35 @@ This command will start a local Ethereum node that simulates mainnet by forking 
    cd biconomy-abstract-setup
    ```
 2. Create a `.env` file with:
-   ```
-   KEY=<your_eoa_private_key>
-   USDC=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-   AUSDC=0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c
-   AAVE_POOL_ADDRESS=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2
-   ```
-3. Install dependencies:
+```sh
+KEY=<PVT_KEY>
+PORT=3000
+REDIS_HOST=redis
+REDIS_PORT=6379
+DOCS_URL=https://documenter.getpostman.com/view/33713944/2sAYBd99Ec
+
+
+ETHER_WHALE=<ETHER_WHALE_ADDRESS>
+USDC_WHALE=<USDC_WHALE_ADDRESS>
+AKASH=<EOA_ACCOUNT_ADDRESS>
+AMOUNT=<USDC_TRANSFER_AMOUNT>
+ETH_AMOUNT=100ether
+USDC=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+AUSDC=0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c
+AAVE_POOL_ADDRESS=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2
+```
+1. Install dependencies:
    ```sh
    bun install
    ```
 **Fund USDC to your account using Cast and Whale:**
-1. Update up your environment variables in `.env`:
-   ```
-   USDC=<usdc_contract_address>
-   USDC_WHALE=<whale_address>
-   AKASH=<your_account_address>
-   AMOUNT=<amount_in_usdc>
-   ETHER_AMOUNT=<amount_in_ether>
-   ETHER_WHALE=<ether_whale_address>
-   ```
-2. Use the provided script to transfer USDC from the whale to your account:
+
+1. Use the provided script to transfer USDC from the whale to your account:
    ```sh
    ./transfer_usdc.sh
    ```
    This script impersonates the whale and sends USDC to your account using Foundry's cast.
-3. Use the provided script to transfer ether from the whale to your account:
+2. Use the provided script to transfer ether from the whale to your account:
    ```sh
    ./transfer_ether.sh
    ```
