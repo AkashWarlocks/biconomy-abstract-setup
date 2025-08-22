@@ -15,8 +15,27 @@ anvil --fork-url <MAINNET_RPC_URL>
 
 This command will start a local Ethereum node that simulates mainnet by forking from a live RPC endpoint. You can use it for safe testing and development with real mainnet state and contracts.
 
+**Clear Setup Instructions:**
+
+**Steps:**
+1. Clone the repo:
+   ```sh
+   git clone https://github.com/AkashWarlocks/biconomy-abstract-setup.git
+   cd biconomy-abstract-setup
+   ```
+2. Create a `.env` file with:
+   ```
+   KEY=<your_eoa_private_key>
+   USDC=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+   AUSDC=0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c
+   AAVE_POOL_ADDRESS=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2
+   ```
+3. Install dependencies:
+   ```sh
+   bun install
+   ```
 **Fund USDC to your account using Cast and Whale:**
-1. Set up your environment variables in `.env`:
+1. Update up your environment variables in `.env`:
    ```
    USDC=<usdc_contract_address>
    USDC_WHALE=<whale_address>
@@ -36,27 +55,8 @@ This command will start a local Ethereum node that simulates mainnet by forking 
    ```
    This script impersonates the whale and sends ether to your account using Foundry's cast.
 
-## 2. Clear Setup Instructions
 
-**Steps:**
-1. Clone the repo:
-   ```sh
-   git clone https://github.com/bcnmy/mee-node-deployment
-   cd mee-node-deployment
-   ```
-2. Create a `.env` file with:
-   ```
-   KEY=<your_eoa_private_key>
-   USDC=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-   AUSDC=0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c
-   AAVE_POOL_ADDRESS=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2
-   ```
-3. Install dependencies:
-   ```sh
-   bun install
-   ```
-
-## 3. Scripts for Forking Mainnet and Starting MEE Node
+## 2. Scripts for Forking Mainnet and Starting MEE Node
 
 **Fork Mainnet with Anvil:**
 ```sh
@@ -88,11 +88,11 @@ OR USE `chains-prod/1.json` Copy paste inside `chains-local/1.json` and change `
 docker compose up -d
 ```
 
-## 4. Test Script Demonstrating the Supertransaction
+## 3. Test Script Demonstrating the Supertransaction
 
 Run the test script:
 ```sh
-bun run new-app.ts
+bun run app.ts
 ```
 This script:
 - Checks balances before and after
@@ -112,3 +112,6 @@ This script:
 - Managing environment variables for private keys and token addresses securely.
 
 ---
+ ## RESULTS
+
+ 

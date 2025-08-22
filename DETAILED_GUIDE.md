@@ -97,4 +97,31 @@ This ensures the transaction uses the actual balance at execution time, making t
 - Switched to using `defineChain` to create a custom chain object for the local Anvil fork, ensuring correct RPC routing and state, which fixed balance queries and transaction execution.
 
 ---
+ ## Results
 
+ 1. Before Super Trasaction Logs:
+```sh
+---------------Before Transaction------------------
+EOA USDC Balance: 29940000000
+Smart Account USDC Balance: 0
+EOA aUSDC Balance: 80001017
+Smart Account aUSDC Balance: 0
+EOA ETH Balance: 1999962309922624173318
+---------------------------------------------------
+```
+
+2. After Super Transaction Logs
+
+```sh
+txn Hash Link: 0x50db5ab9ddaab37d0fbd07075a14eb394153d410696926ae8b546d084b38254e
+Transaction succeeded!
+---------------After Transaction------------------
+EOA USDC Balance: 29930000000
+Smart Account USDC Balance: 0
+------------**********************----------------
+EOA aUSDC Balance: 90001057
+------------**********************----------------
+Smart Account aUSDC Balance: 0
+EOA ETH Balance: 1999959043998790918288
+---------------------------------------------------
+```
